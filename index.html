@@ -8,7 +8,7 @@
     <link href="/public/assets/styles/salesforce-lightning-design-system.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-    
+
     <div class="slds-theme_inverse slds-grid slds-p-around_medium slds-text-heading_medium">
         <span>My Web Site</span>
     </div>
@@ -17,10 +17,11 @@
             <div class="slds-grid slds-m-vertical_medium slds-p-around_medium slds-theme_<%=result.success%>">
                 <%=result.message%>
             </div>
-        <% } %> 
+        <% } %>
         <div class="slds-card">
             <div class="slds-card__body slds-card__body_inner ">
                 <form class="slds-form slds-grid slds-wrap" action="/login" method="post">
+
                     <div class="slds-form-element slds-size_1-of-1">
                         <label class="slds-form-element__label" for="userName">Username</label>
                         <div class="slds-form_element__control">
@@ -34,14 +35,37 @@
                         </div>
                     </div>
                     <div class="slds-grid slds-size_1-of-1 slds-m-top_small">
-                        <button type="submit" class="slds-button slds-button_brand slds-col_bump-left">
+                        <button type="button" onclick="signIn();" class="slds-button slds-button_brand slds-col_bump-left">
                             Login
                         </button>
                     </div>
+
                 </form>
-                
             </div>
         </div>
     </div>
 </body>
+<script>
+    function signIn() {
+        const xttp = new XMLHttpRequest();
+        const form = document.querySelector('form');
+
+        const requestBody = {
+            userName:form.userName.value,
+            password:form.password.value
+        }
+
+        xttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                const user = JSON.parse(this.responseText);
+                alert(`Welcome ${user.name} with ajax`);
+            }
+        }
+
+        xttp.open('POST', '/login', true);
+        xttp.setRequestHeader('Content-type', 'application/json');
+        xttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xttp.send(JSON.stringify(requestBody));
+    }
+</script>
 </html>
