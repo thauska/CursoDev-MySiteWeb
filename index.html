@@ -47,7 +47,7 @@
 </body>
 <script>
     function signIn() {
-        const xttp = new XMLHttpRequest();
+        //const xttp = new XMLHttpRequest();
         const form = document.querySelector('form');
 
         const requestBody = {
@@ -55,7 +55,22 @@
             password:form.password.value
         }
 
-        xttp.onreadystatechange = function() {
+        const headers = new Headers();
+        headers.append('Content-type', 'application/json');
+        headers.append('X-Requested-With', 'XMLHttpRequest');
+
+        const request = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(requestBody)
+        }
+
+        fetch('/login', request)
+            .then( res => res.json())
+            .then( user => alert(`Welcome ${user.name} with fetch`) )
+            .catch( error => console.error(error) );
+
+        /* xttp.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
                 const user = JSON.parse(this.responseText);
                 alert(`Welcome ${user.name} with ajax`);
@@ -65,7 +80,7 @@
         xttp.open('POST', '/login', true);
         xttp.setRequestHeader('Content-type', 'application/json');
         xttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xttp.send(JSON.stringify(requestBody));
+        xttp.send(JSON.stringify(requestBody)); */
     }
 </script>
 </html>
